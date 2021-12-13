@@ -1,6 +1,6 @@
 ## Saman's portfolio
 
-You can use the [editor on GitHub](https://github.com/smnbajwa/smnbajwa.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+1. **Milling Machine Bed Extension**
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+2. **Mini-Conveyor system**
 
