@@ -17,30 +17,50 @@
 </head>
 <h1 align="center">Self-Balancing Robot using Arduino</h1>
     <body>
+      <table border=0 cellspacing=0 cellpadding=0 width=435><tr valign=top><td width=435>
 <p>Date added: 03 October 2022</p>     
 <p>Status: Ongoing</p>
-<b>Summary:</b>
-    <p>
-        This project was inspired by a similar robot I stumbled upon <a href="http://www.brokking.net/yabr_main.html">here</a>.
-    </p>
-    <p>
-        Machines that recreate the "human" tasks have always fascinated me.
-        <br> 
-        After realising how much work goes into making such a machine, I marvel 
-        <br>
-        at the our body and mind that they make it possible.
-    </p>
-    <p>
-        <b>Chasis:</b>
-        <p>Chasis design consists of two rectangular pieces of wood (170x110x10mm).
-        <br>
-        I initially used slightly thinneracrylic sheets but they vibrated too much 
-        <br>
-        from stepper motor vibrations. Wood is better at damping and easier to tighten nuts into.
-    </p>
-    <p>
-        Two platform are held together using 1/4" threaded rods and nuts.
-    </p>
+<b>Issues encountered:</b>
+<ol>
+<li>Acrylic sheets were prone to vibration and noisy. It was hard to
+   tighten the nuts on them even with washers. The vibrations would
+   make the nuts loose. That's why wood is a better choice. It does
+   not vibration and nuts dig into it so they are secured.</li>
+
+<li>Initially I used a breadboard for the circuit. The robot would
+  randomly stop and fall over. Turns out that the vibrations made the
+  connection between the wire and breadboard intermittent. The
+  microcontroller lost power and turned off.<br>
+That's why I decide to solder the components on a protoboard.</li>
+
+<li>The inspiration of the robot came from a YouTube I watched.
+  I sourced some of same components but not all because I did not
+  just want to copy someone else's design as is. As a result the 
+  control program would not work as is and I did not have enough
+  expertise in C++ to modify it.
+
+<p>I decided to write my own program for the control. I had to take 
+a detour and learn some C++ to be able to do that. It was a mistake 
+as there are no simple libraries I could just use. </p>
+
+<p>The gyro sensor calculates angle of tilt every 4ms. This angle is 
+used
+as error and fed into a PID loop which drives the motors a 
+certain amount to bring the robot back to equilibrium position.</p>
+
+<p>There are existing libraries to control the speed or acceleration of a 
+stepper motor. However, they don't work if I change the speed every 4ms.
+This is because these libraries have functions which call other functions
+in the Arduino library which take much longer time than 4ms.
+
+<p>Also, it is not just the programming knowledge that I needed.
+  There are features of AVR microcontrollers that I was unaware of. </p>
+
+<p>I learned that it is possible to change bits on a specific register to 
+drive the motor one step. This is much faster than calling functions 
+provided by the library.</li></p>
+</ol>
+</td></tr></table>
 <h4>Pictures/Video:</h4>
     <figure><a href="./images/circuit1.jpg" target="_blank"><img src="./images/circuit1.jpg" alt="Circuit" height="315"></a> 
     <figcaption>Fig. 1 - Components soldered on protoboard <br>(1) Arduino Nano (2) MPU6050 (3) A4988 Stepper motor driver x2 <br>(4) DC-DC voltage converter (added later) (5) 100uF Capacitors x2</figcaption>
