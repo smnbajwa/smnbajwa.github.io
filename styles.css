@@ -4,4 +4,12 @@
 
 .project-list {
     display: flex;
+    border: 2px solid red;
+    flex-flow: row wrap;
 }
+
+/*.project-list div {
+    flex-flow: column wrap;
+    flex: 1;
+    justify-content: space-between;
+}*/
