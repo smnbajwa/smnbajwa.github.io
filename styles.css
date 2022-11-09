@@ -1,0 +1,7 @@
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.project-list {
+    display: flex;
+}
