@@ -7,3 +7,9 @@
     /*border: 2px solid red;*/
     flex-flow: row wrap;
 }
+
+img {
+    border: 5px solid #cecece;
+    padding: 2px;
+    margin: 3px;
+}
