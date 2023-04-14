@@ -12,7 +12,7 @@ body {
     color: #ffffff;
 }
 
-.project-list {
+.container {
     display:flex;
     flex-direction: column;
 }
@@ -43,4 +43,9 @@ img, iframe {
 a {
     //color: inherit;
     color: #71DF80;
+}
+
+#backtotop {
+    align-self: flex-end;
+    padding: 50px 20px 0px 0px;
 }
