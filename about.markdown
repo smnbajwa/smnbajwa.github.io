@@ -4,15 +4,14 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+My name is Saman (pronounced suh.muhn) and I like to get to bottom of things.<br>
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+As a child, I would take apart my toys to find out what's inside. This satisfied my curiosity in addition to frowning parents and one less toy as I could not put it back together.<br>
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+I can put things back together now so I guess that's growth?
 
+On this website, I will documents my journey as I dabble in electronics, coding, and other technical enterprises.<br>
 
-[jekyll-organization]: https://github.com/jekyll
+I am a Mechanical Engineering graduate from Punjab Technical University.<br>
+
+In my free time, I like to read, cook, and practice Jiu Jitsu/Freestyle Wrestling.
