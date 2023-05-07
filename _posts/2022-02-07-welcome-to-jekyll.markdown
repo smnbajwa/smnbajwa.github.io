@@ -57,7 +57,9 @@ Kp, Ki, and Kd are proportional, integral, and derivative coefficients.
 
 The value of u(t) is what drives the motors to achieve the required balance.
 
-The arduino code can be found in the github repository at
+The arduino code can be found in the github repository [here][repo] 
+
+Watch the video [here][video]
 
 **Code**
 
@@ -354,3 +356,5 @@ ISR(TIMER2_COMPA_vect){
 [7]: \assets\img\7.jpg
 [8]: \assets\img\8.png
 [9]: \assets\img\9.png
+[repo]: https://github.com/smnbajwa/self-balancing-robot
+[video]: https://youtu.be/CptsSRe3XCs
