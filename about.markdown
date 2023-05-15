@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-My name is Saman (pronounced suh.muhn) and I like to get to bottom of things.<br>
+My name is Saman (pronounced suh.muhn) and I like to get to the bottom of things.<br>
 
 As a child, I would take apart my toys to find out what's inside. This satisfied my curiosity in addition to frowning parents and one less toy as I could not put it back together.<br>
 
