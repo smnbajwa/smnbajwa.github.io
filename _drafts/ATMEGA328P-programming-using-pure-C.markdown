@@ -27,7 +27,43 @@ Uno has a 16 MHz oscillator on the board and 328p is configured at Arduino facto
 
 The way to do that is by changing something called 'fuse bits'. These are locations in memory where MCU configuration is stored.
   
-To access the fuse bits, we need to use a tool called AVRdude. We can install it ourselves but Arduino IDE comes with it already. 
+To access the fuse bits, we need to use a tool called AVRdude. We can install it ourselves but Arduino IDE comes with it already.  Looking at the verbose output from Arduino, I discover that avr binary is located in 
+/home/saman/arduino-1.8.13-linux64/arduino-1.8.13/hardware/tools/avr
+I cd into that directory and run this command:
+./bin/avrdude -C ./etc/avrdude.conf -v -p atmega328p -c stk500v1 -P /dev/ttyUSB0 -b 19200 -U lfuse:r:/tmp/lfusesetting:h
+All this command does is this:
+  1. Specifiy of avrdude.conf file using -C
+  2. Print verbose output using -v
+  3. Specify target mcu atmega328p using -p
+  4. Programmer I am using '-c stk500v1' (I got this from Arduino log)
+  5. Port where my device is connected (-P /dev/ttyUSB0)
+  6. Baud rate (-b 19200)
+  7. -U specifies a memoery operation. This needs exaplanation.
+      lfuse:r:/tmp/lfusesetting:h
+      'lfuse' --> access lfuse byte
+      'r' --> read the memory and write to specified file
+      '/tmp/lfusesetting' --> specified file
+      'h' --> format of the file, hex in this case
+  
+ See this link <https://www.nongnu.org/avrdude/user-manual/avrdude_3.html#Option-Descriptions> for more information about these options.
+  
+  Now, I can use sudo cat on /tmp/lfusesetting to get: 0xff
+ As per the datasheet, to use Internetal RC Oscillator 8 MHz, bits 0 to 3 in low fuse byte need to be set as 0010 in binary
+ This means that lfuse byte should be 0xf2.
+  I run this command to write(w) 0xF2 to lfuse byte
+  ./bin/avrdude -C ./etc/avrdude.conf -v -p atmega328p -c stk500v1 -P /dev/ttyUSB0 -b 19200 -U lfuse:w:0xF2:h
+  
+  You should see something like this.
+  
+  <verbose output from Arduino>
+    
+    Congratulations. Now we are ready to pull out the ATmega328p from Uno board and slap it on a breadboard.
+  
+ 
+  
+
+  
+  
 
 
 Taking a look at the Blink.ino, you will see functions such as setup(), loop(), pinMode(), etc.
