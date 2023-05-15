@@ -19,13 +19,15 @@ ATMega328p on Uno board has 28 pins and no USB port. So how are we going to prog
 <DIP pinout>
 We need something called an ISP (In-system Programmer). They are available in the market like the one here <AVR ISP>. 
 We can also use an Arduino board as a programmer. I am going to use Arduino Nano for this purpose.
-This step is pretty straightforward. Upload the example sketch called ArduinoISP that comes with Arduino IDE to the Nano and you have your own programmer ready. I am going to refer to this Nano as ISP and ATMega328p as '328p'.
+This step is pretty straightforward. First, turn on 'Verbose Output' from Arduino preferences. Upload the example sketch called ArduinoISP that comes with Arduino IDE to the Nano and you have your own programmer ready. I am going to refer to this Nano as ISP and ATMega328p as '328p'.
 
 ** Fuse bits **
 
-Uno has a 16 MHz oscillator on the board and 328p is configured at Arduino factory to use that. Once we remove it from the board, it won't have a clock. Luckily, it comes with an onboard 8 MHz and we are going to use that.
+Uno has a 16 MHz oscillator on the board and 328p is configured at Arduino factory to use that. Once we remove it from the board, it won't have a clock. Luckily, it comes with an onboard 8 MHz and we will use that.
 
 The way to do that is by changing something called 'fuse bits'. These are locations in memory where MCU configuration is stored.
+  
+To access the fuse bits, we need to use a tool called AVRdude. We can install it ourselves but Arduino IDE comes with it already. 
 
 
 Taking a look at the Blink.ino, you will see functions such as setup(), loop(), pinMode(), etc.
