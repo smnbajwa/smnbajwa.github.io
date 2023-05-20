@@ -2,7 +2,7 @@
 layout: post
 title:  "Self-balancing robot using Arduino"
 date:   2022-02-07 03:39:28 +0000
-categories: jekyll update
+categories: AVR
 permalink: /selfbalancingrobot/
 ---
 ![1]
