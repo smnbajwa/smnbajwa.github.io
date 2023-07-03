@@ -5,7 +5,7 @@ date:   2022-02-07 03:39:28 +0000
 categories: AVR
 permalink: /selfbalancingrobot/
 ---
-![1]
+[![Watch the video](https://img.youtube.com/vi/CptsSRe3XCs/hqdefault.jpg)](https://youtu.be/CptsSRe3XCs)
 
 I wanted to learn more about electronics and programming so a friend suggested that I take on a project to see if I actually like doing the work.
 
@@ -59,8 +59,6 @@ Kp, Ki, and Kd are proportional, integral, and derivative coefficients.
 The value of u(t) is what drives the motors to achieve the required balance.
 
 The arduino code can be found in the github repository [here][repo] 
-
-Watch the video [here][video]
 
 **Code**
 
@@ -348,7 +346,6 @@ ISR(TIMER2_COMPA_vect){
 
 [YABR]: http://www.brokking.net/yabr_main.html
 [video]: https://www.youtube.com/watch?v=I6z26LVu5y0
-[1]: \assets\img\1.jpg
 [2]: \assets\img\2.jpg
 [3]: \assets\img\3.jpg
 [4]: \assets\img\4.jpg
