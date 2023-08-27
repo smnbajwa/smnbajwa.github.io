@@ -5,7 +5,7 @@ date:   2022-02-07 03:39:28 +0000
 categories: AVR
 permalink: /selfbalancingrobot/
 ---
-[![Watch the video](https://img.youtube.com/vi/CptsSRe3XCs/hqdefault.jpg)](https://youtu.be/CptsSRe3XCs)
+![gif](/assets/img/robot.gif)
 
 I wanted to learn more about electronics and programming so a friend suggested that I take on a project to see if I actually like doing the work.
 
