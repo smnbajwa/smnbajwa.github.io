@@ -6,6 +6,8 @@ title: Writing a simple UART library
 # Objective
 In a previous [post](https://smnbajwa.github.io/2023/08/03/making-avr-talk-with-pc-using-UART.html), I explained how to make AVR communicate with my PC using UART. Since I will be using UART in other projects, I wanted to write a simple library for my own use.
 
+[Link to github repo](https://github.com/smnbajwa/myUART)
+
 What functions should this library have? To begin with:
 
 1. Initialize UART
