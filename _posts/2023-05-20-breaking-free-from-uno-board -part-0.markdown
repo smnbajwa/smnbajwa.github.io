@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Breaking free from Uno board [Part 0]"
+title:  "From Arduino to AVR"
 ---
 
 To make the ATMega328p MCU work without the Arduino Uno board, we need two things.

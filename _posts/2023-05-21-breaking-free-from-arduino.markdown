@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Breaking free from Arduino [Part 1]"
+title:  "Blink LED with AVR"
 ---
 
 The goal of this guide is to make the blink example work without using Arduino IDE. 
