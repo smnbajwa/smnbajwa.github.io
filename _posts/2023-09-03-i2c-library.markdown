@@ -1,0 +1,305 @@
+---
+layout: post
+title: Writing a simple I2C library
+---
+
+# Objective
+I recently learned about I2C communication protocol and I wanted to implement a simple library for it that I could use in future projects.
+
+[Github repo](https://github.com/smnbajwa/myI2C)
+
+# Background
+I2C or Two Wire Interface (TWI) is a synchronous, Controller-Target, communication protocol. It only requires two wires, one for clock (SCL) and second for data (SDA).
+
+Each device has a 7-bit address, allowing for a maximum of 127 devices.
+
+Communication takes place in form of packets which are marked by a START and a STOP condition. To communicate with a specific target, controller sends a START condition followed by an address byte, which consists of a 7-bit target address and a read/write bit.
+
+A repeated START condition could be sent without a STOP condition to address a different target without relinquishing the control of the bus.
+
+See [Example](#example) for more details.
+
+For starters, I am going to need the following functions:
+1. Initialize I2C
+2. Start the communication
+3. Stop the commmunication
+4. Send a byte
+5. Receive a byte and send ACK
+6. Receive a byte and send NACK to signal end of transmission
+7. Read status register
+
+# Code
+
+1. 
+    ```c
+    // myI2C.c
+    #include <avr/io.h>
+    #include "myI2C.h"
+
+
+    void initI2C(void) {
+        TWBR = BIT_RATE_REGISTER;
+
+        TWCR |= 1 << TWEN;
+    }
+    ```
+    ```c
+    // myI2C.h
+    #include <avr/io.h>
+
+    #define I2C_W 				0x00
+    #define I2C_R				0x01
+    #define BIT_RATE_REGISTER 	        32		//p.222 datasheet
+
+    void initI2C(void);
+
+    void i2cWaitForComplete(void);
+
+    void i2cStart(void);
+
+    void i2cStop(void);
+
+    void i2cSend(uint8_t data);
+
+    uint8_t i2cReadAck(void);
+
+    uint8_t i2cReadNoAck(void);
+
+    uint8_t readStatus(void);
+    ```
+
+    Register and pin names such as `TWBR`, `TWCR`, `TWEN` come from `avr/io.h`.
+
+    `BIT_RATE_REGISTER` macro is from `myI2C.h`
+
+    `TWBR` is the bit rate register. I2C module on AVR supports upto 400 KHz but I am using
+    100 KHz correspoding to `TWBR` value of 32 set in the header file.
+
+    `TWEN` needs to be set in `TWCR` to enable I2C.
+
+2. 
+    ```c
+    // myI2C.c
+    void i2cWaitForComplete(void) {
+        loop_until_bit_is_set(TWCR, TWINT);
+    }
+    ```
+    This function uses a blocking loop until `TWINT` in `TWCR` is set. `TWINT` is interrupt flag and it is set when I2C module finishes a task.
+
+3. 
+    ```c
+    void i2cStart(void) {
+        TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWSTA);
+        i2cWaitForComplete();
+    }
+    ```
+    ![TWCR](/assets/img/i2c/TWCR.png)
+
+    Set START condition (`TWSTA`) and make sure I2C is enabled (`TWEN`) in the Control Register (`TWCR`). Setting `TWINT` bit to 1 clears it and starts the communication.
+
+    The waiting loop `i2cWaitForComplete()` waits until this task is finished.
+
+4. 
+    ```c
+    void i2cStop(void) {
+        TWCR = ((1 << TWEN) | (1 << TWINT) | (1 << TWSTO));
+    }
+    ```
+    Similar to `i2cStart()` but setting the STOP bit (`TWSTO`). This marks the end of the transmission until the next START condition.
+
+5. 
+    ```c
+    void i2cSend(uint8_t data) {
+        TWDR = data;
+        TWCR = (1 << TWEN) | (1 << TWINT);
+        i2cWaitForComplete();
+    }
+    ```
+    ![TWDR](/assets/img/i2c/TWDR.png)
+
+    `TWDR` is the Data Register and we store the `data` byte in it. Then `TWINT` is set again to start the process.
+
+6. 
+    ```c
+    uint8_t i2cReadAck(void) {
+        TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
+        i2cWaitForComplete();
+        return (TWDR);
+    }
+    ```
+    When addressing a target in Read mode, this function is used to set `TWINT` and `TWEA`. Setting `TWEA` make the controller sends the `ACK` condition to acknowledge the receive.
+
+    After the waiting loop finishes, byte from the Data Register is returned.
+
+7. 
+    ```c
+    uint8_t i2cReadNoAck(void) {
+        TWCR = (1 << TWEN) | (1 << TWINT);
+        i2cWaitForComplete();
+        return (TWDR);
+    }
+    ```
+    Similar to `i2CReadNoAck()` but `TWEA` is not set. As a result, `NACK` instead of `ACK` is sent and target does not put new data in the data register.
+
+8. 
+```c
+uint8_t readStatus(void) {
+	return (TWSR & 0xF8);
+}
+```
+![TWSR](/assets/img/i2c/TWSR.png)
+
+TWSR is the Status Register and this returns the Status code masking the bits [2:0] that are not the part of status code
+
+# Complete Code
+```c
+#include <avr/io.h>
+#include "myI2C.h"
+
+
+void initI2C(void) {
+	TWBR = BIT_RATE_REGISTER;
+
+	TWCR |= 1 << TWEN;
+}
+
+void i2cWaitForComplete(void) {
+	loop_until_bit_is_set(TWCR, TWINT);
+}
+
+void i2cStart(void) {
+	TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWSTA);
+	i2cWaitForComplete();
+}
+
+void i2cStop(void) {
+	TWCR = ((1 << TWEN) | (1 << TWINT) | (1 << TWSTO));
+}
+
+void i2cSend(uint8_t data) {
+	TWDR = data;
+	TWCR = (1 << TWEN) | (1 << TWINT);
+	i2cWaitForComplete();
+}
+
+uint8_t i2cReadAck(void) {
+	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
+	i2cWaitForComplete();
+	return (TWDR);
+}
+
+uint8_t i2cReadNoAck(void) {
+	TWCR = (1 << TWEN) | (1 << TWINT);
+	i2cWaitForComplete();
+	return (TWDR);
+}
+
+uint8_t readStatus(void) {
+	return (TWSR & 0xF8);
+}
+```
+
+# Example
+We will use myI2C lib to read temperature data from the MPU6050 sensor and display it over UART.
+The code is pretty self-explanatory except for the I2C part which I explained below.
+
+```c
+    i2cStart();                             
+    i2cSend(MPU_ADDRESS + I2C_W);
+    i2cSend(PWR_MGMT_1);
+    i2cSend(0x00);
+    i2cStop();
+```
+We start by sending a START condition to signal packet start.
+
+Then we send an address byte which consists of 7-bit `MPU_ADDRESS` and one write bit `I2C_W`. 
+This tells the target that we wish to communicate with it in WRITE mode.
+
+Then, we write the address of the Power Management Register.
+
+In the end, we write the value to be stored in Power Management Register followed by STOP.
+<br><br>
+
+```c
+    while (1) {
+        // Packet start
+        i2cStart();
+        i2cSend(MPU_ADDRESS + I2C_W);
+        i2cSend(TMP_REGISTER);
+
+        i2cStart();
+        i2cSend(MPU_ADDRESS + I2C_R);
+
+        temp = (i2cReadAck() << 8) + i2cReadNoAck();
+
+        i2cStop();
+```
+In this portion of the code, we read values from the Temperature Register (`TMP_REGISTER`) on the target using a while loop.
+
+We begin as before, with a START followed by addressing the target in write mode, and writing the address of the register we are interested in.
+
+To read values from `TMP_REGISTER`, we need to address the target in READ mode. This is done by sending another START followed by the address byte with R/W bit set.
+
+Then we read a byte using `i2cReadAck()`, shift it 8 bits to the left before reading another byte using `i2cReadNoAck()`. The target automatically increments the register to be read after a read.
+
+We finish with a STOP to signal end of packet.
+<br><br><br>
+Here is the full code:
+
+```c
+#include <avr/io.h>
+#include <util/delay.h>
+#include "../uart/myUART.h"
+#include "myI2C.h"
+#include <stdio.h>
+
+// Store addresses
+#define MPU_ADDRESS         0xD0
+#define PWR_MGMT_1          0x6B
+#define TMP_REGISTER        0x41
+
+int main(void) {
+    int16_t temp;
+    char *string_for_output;
+
+    initUART(9600);
+    printString("UART Initialized\r\n");
+
+    initI2C();
+    printString("I2C Initialized\r\n");
+
+    // First packet starts
+    i2cStart();                             
+    i2cSend(MPU_ADDRESS + I2C_W);
+    i2cSend(PWR_MGMT_1);
+    i2cSend(0x00);
+    i2cStop();
+
+
+    printString("Begin reading...\r\n");
+    while (1) {
+        // Packet start
+        i2cStart();
+        i2cSend(MPU_ADDRESS + I2C_W);
+        i2cSend(TMP_REGISTER);
+
+        i2cStart();
+        i2cSend(MPU_ADDRESS + I2C_R);
+
+        temp = (i2cReadAck() << 8) + i2cReadNoAck();
+
+        i2cStop();
+        // Packet end
+       
+        sprintf(string_for_output, "%f", (temp / 340.0) + 36.53);
+        printString(string_for_output);
+        printString("\r\n");
+
+        _delay_ms(100);
+    }
+}
+```
+
+# Result
+
+![Temp reading](/assets/img/i2c/temp_reading.png)
