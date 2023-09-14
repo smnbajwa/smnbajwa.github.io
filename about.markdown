@@ -4,14 +4,23 @@ title: About
 permalink: /about/
 ---
 
-My name is Saman (pronounced suh.muhn) and I like to get to the bottom of things.<br>
+# Why this blog?
 
-As a child, I would take apart my toys to find out what's inside. This satisfied my curiosity in addition to frowning parents and one less toy as I could not put it back together.<br>
+> What I cannot create, I do not understand.  
+>                                - Richard Feynman
 
-I can put things back together now so I guess that's growth?
+The above quote is the motivation behind this blog.
 
-On this website, I will documents my journey as I dabble in electronics, coding, and other technical enterprises.<br>
+I have been learning about Embedded systems, programming, and electronics.
 
-I am a Mechanical Engineering graduate from Punjab Technical University.<br>
+Writing about what I have learned helps me understand it better and maybe help others.
 
-In my free time, I like to read, cook, and practice Jiu Jitsu/Freestyle Wrestling.
+# Who am I?
+My name is Saman.
+A few things about me:
+
+- I prefer reading over watching (fiction being the only exception)
+- I practice grappling, specifically Jiu Jitsu and Wrestling
+- I have played Counter-Strike semi-professionally (10k hours on my steam account)
+- I use Lindy effect to make my decision making easier (tried and tested > latest fads)
+- I like Tarantino's movies
